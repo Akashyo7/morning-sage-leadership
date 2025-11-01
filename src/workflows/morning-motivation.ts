@@ -115,11 +115,20 @@ export const morningMotivationWorkflow = createWorkflowChain({
   .andThen({
     id: "get-wisdom",
     execute: async ({ data }) => {
-      const wisdomResult = await motivationalQuotesTool.execute({
-        philosophy: data.wisdomParams.philosophy,
-        mood: data.wisdomParams.mood,
-        teamContext: data.wisdomParams.teamContext,
-      });
+      let wisdomResult = null;
+      
+      if (motivationalQuotesTool.execute) {
+        // Map mood to compatible type for motivationalQuotesTool
+        const compatibleMood = data.wisdomParams.mood === "creative" ? "focused" : 
+                              data.wisdomParams.mood === "motivational" ? "energetic" :
+                              data.wisdomParams.mood as "energetic" | "calm" | "focused" | "confident" | "resilient";
+        
+        wisdomResult = await motivationalQuotesTool.execute({
+          philosophy: data.wisdomParams.philosophy,
+          mood: compatibleMood,
+          teamContext: data.wisdomParams.teamContext,
+        });
+      }
 
       return {
         ...data,
@@ -132,12 +141,16 @@ export const morningMotivationWorkflow = createWorkflowChain({
   .andThen({
     id: "get-music",
     execute: async ({ data }) => {
-      const musicResult = await musicSelectionTool.execute({
-        mood: data.musicParams.mood,
-        workType: data.musicParams.workType,
-        teamSize: data.musicParams.teamSize,
-        timeOfDay: data.musicParams.timeOfDay,
-      });
+      let musicResult = null;
+      
+      if (musicSelectionTool.execute) {
+        musicResult = await musicSelectionTool.execute({
+          mood: data.musicParams.mood,
+          workType: data.musicParams.workType,
+          teamSize: data.musicParams.teamSize,
+          timeOfDay: data.musicParams.timeOfDay,
+        });
+      }
 
       return {
         ...data,
@@ -161,8 +174,8 @@ export const morningMotivationWorkflow = createWorkflowChain({
 **Mood:** ${data.desiredMood}
 **Time:** ${data.timeOfDay}
 
-**Daily Wisdom:** ${data.dailyWisdom.philosophy} philosophy
-**Music:** ${data.musicSelection.duration} curated playlist
+**Daily Wisdom:** ${(data.dailyWisdom as any)?.philosophy || 'Mixed'} philosophy
+**Music:** ${(data.musicSelection as any)?.duration || '30 minutes'} curated playlist
 
 Ready to start your productive day with focus and inspiration!`;
 

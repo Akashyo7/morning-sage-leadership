@@ -5,7 +5,9 @@ import { createPinoLogger } from "@voltagent/logger";
 import { groq } from "@ai-sdk/groq";
 import { honoServer } from "@voltagent/server-hono";
 import { expenseApprovalWorkflow, morningMotivationWorkflow } from "./workflows";
+import { enhancedMorningMotivationWorkflow } from "./workflows/enhanced-morning-motivation";
 import { motivationalQuotesTool, musicSelectionTool } from "./tools";
+import { enhancedMotivationTool } from "./tools/enhanced-motivation";
 
 // Create a logger instance
 const logger = createPinoLogger({
@@ -47,7 +49,7 @@ const morningSageAgent = new Agent({
 
 Always respond with warmth, wisdom, and practical guidance. Be encouraging and supportive while providing actionable insights for leadership and personal growth.`,
   model: groq("llama-3.3-70b-versatile"),
-  tools: [motivationalQuotesTool, musicSelectionTool],
+  tools: [motivationalQuotesTool, musicSelectionTool, enhancedMotivationTool],
   memory,
 });
 
@@ -58,6 +60,7 @@ new VoltAgent({
   workflows: {
     expenseApprovalWorkflow,
     morningMotivationWorkflow,
+    enhancedMorningMotivationWorkflow,
   },
   server: honoServer(),
   logger,
