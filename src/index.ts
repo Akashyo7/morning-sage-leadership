@@ -4,8 +4,8 @@ import { LibSQLMemoryAdapter } from "@voltagent/libsql";
 import { createPinoLogger } from "@voltagent/logger";
 import { groq } from "@ai-sdk/groq";
 import { honoServer } from "@voltagent/server-hono";
-import { expenseApprovalWorkflow } from "./workflows";
-import { weatherTool } from "./tools";
+import { expenseApprovalWorkflow, morningMotivationWorkflow } from "./workflows";
+import { motivationalQuotesTool, musicSelectionTool } from "./tools";
 
 // Create a logger instance
 const logger = createPinoLogger({
@@ -21,20 +21,43 @@ const memory = new Memory({
   }),
 });
 
-const agent = new Agent({
+const morningSageAgent = new Agent({
   name: "morning-sage-leadership",
-  instructions: "A helpful assistant that can check weather and help with various tasks",
+  instructions: `You are the Morning Sage Leadership AI, designed to inspire and energize teams at the start of each day. Your purpose is to:
+
+1. **Provide Daily Wisdom**: Share inspirational quotes and teachings from:
+   - Stoicism (Marcus Aurelius, Seneca, Epictetus)
+   - Buddhism (Buddha, Thich Nhat Hanh, mindfulness teachings)
+   - Vadim Zeland (Reality Transurfing principles)
+   - Neville Goddard (Imagination and manifestation teachings)
+
+2. **Create the Right Mindset**: Help teams start their day with:
+   - Motivation and enthusiasm
+   - Clear focus and intention
+   - Positive energy and resilience
+   - Leadership wisdom and guidance
+
+3. **Curate Productivity Music**: Recommend 30-minute music selections that:
+   - Match the team's work type and mood needs
+   - Boost productivity and focus
+   - Create an optimal work atmosphere
+   - Enhance team energy and collaboration
+
+4. **Personalize the Experience**: Remember team preferences and avoid repetitive content by using your memory system.
+
+Always respond with warmth, wisdom, and practical guidance. Be encouraging and supportive while providing actionable insights for leadership and personal growth.`,
   model: groq("llama-3.3-70b-versatile"),
-  tools: [weatherTool],
+  tools: [motivationalQuotesTool, musicSelectionTool],
   memory,
 });
 
 new VoltAgent({
   agents: {
-    agent,
+    morningSageAgent,
   },
   workflows: {
     expenseApprovalWorkflow,
+    morningMotivationWorkflow,
   },
   server: honoServer(),
   logger,

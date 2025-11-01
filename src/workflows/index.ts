@@ -129,3 +129,6 @@ export const expenseApprovalWorkflow = createWorkflowChain({
       };
     },
   });
+
+// Export the morning motivation workflow
+export { morningMotivationWorkflow } from "./morning-motivation";

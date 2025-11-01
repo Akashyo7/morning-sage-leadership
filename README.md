@@ -1,251 +1,193 @@
-<div align="center">
-  <h1>⚡ morning-sage-leadership</h1>
-  <p>AI Agent powered by <a href="https://voltagent.dev">VoltAgent</a></p>
-  
-  <p>
-    <a href="https://github.com/voltagent/voltagent"><img src="https://img.shields.io/badge/built%20with-VoltAgent-blue" alt="Built with VoltAgent" /></a>
-    <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%3E%3D22-brightgreen" alt="Node Version" /></a>
-  </p>
-</div>
+# 🌅 Morning Sage Leadership AI Agent
+
+A VoltAgent-powered AI assistant designed to inspire and energize teams at the start of each day with wisdom, motivation, and curated music selections.
+
+## ✨ Features
+
+- **Daily Wisdom**: Inspirational quotes from Stoicism, Buddhism, Vadim Zeland, and Neville Goddard
+- **Smart Music Curation**: 30-minute productivity playlists tailored to team needs
+- **Personalized Experience**: Memory system to avoid repetitive content
+- **Team-Focused**: Optimized for different team sizes and work types
+- **Workflow Integration**: Structured morning motivation sessions
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 20+ 
-- Git
-- Groq API Key (optional - can configure later)
-  - Get your key at: https://console.groq.com/keys
+- Node.js 18+ 
+- npm or yarn
+- Groq API key (for Llama 3.3 70B model)
 
 ### Installation
 
-```bash
-# Clone the repository (if not created via create-voltagent-app)
-git clone <your-repo-url>
-cd morning-sage-leadership
-
-# Install dependencies
-npm install
-
-# Copy environment variables
-cp .env.example .env
-```
-
-### Configuration
-
-Edit `.env` file with your API keys:
-
-```env
-GROQ_API_KEY=your-api-key-here
-
-# VoltOps Platform (Optional)
-# Get your keys at https://console.voltagent.dev/tracing-setup
-# VOLTAGENT_PUBLIC_KEY=your-public-key
-# VOLTAGENT_SECRET_KEY=your-secret-key
-```
-
-### Running the Application
-
-```bash
-# Development mode (with hot reload)
-npm run dev
-
-# Production build
-npm run build
-
-# Start production server
-npm start
-```
-
-## 🎯 Features
-
-This VoltAgent application includes:
-
-- **AI Agent**: Powered by Groq (Llama 3.3 70B)
-- **Workflows**: Pre-configured expense approval workflow
-- **Memory**: Built-in conversation history
-- **Tools**: Extensible tool system
-- **Type Safety**: Full TypeScript support
-
-## 🔍 VoltOps Platform
-
-### Local Development
-The VoltOps Platform provides real-time observability for your agents during development:
-
-1. **Start your agent**: Run `npm run dev`
-2. **Open console**: Visit [console.voltagent.dev](https://console.voltagent.dev)
-3. **Auto-connect**: The console connects to your local agent at `http://localhost:3141`
-
-Features:
-- 🔍 Real-time execution visualization
-- 🐛 Step-by-step debugging
-- 📊 Performance insights
-- 💾 No data leaves your machine
-
-### Production Monitoring
-For production environments, configure VoltOpsClient:
-
-1. **Create a project**: Sign up at [console.voltagent.dev/tracing-setup](https://console.voltagent.dev/tracing-setup)
-2. **Get your keys**: Copy your Public and Secret keys
-3. **Add to .env**:
-   ```env
-   VOLTAGENT_PUBLIC_KEY=your-public-key
-   VOLTAGENT_SECRET_KEY=your-secret-key
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd morning-sage-leadership
    ```
-4. **Configure in code**: The template already includes VoltOpsClient setup!
 
-## 📁 Project Structure
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and add your API keys:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   VOLTAGENT_PUBLIC_KEY=your_voltagent_public_key
+   VOLTAGENT_SECRET_KEY=your_voltagent_secret_key
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Access the agent**
+   - Server: http://localhost:3141
+   - Swagger UI: http://localhost:3141/ui
+   - VoltOps Console: https://console.voltagent.dev
+
+## 🎯 Usage Examples
+
+### Getting Daily Motivation
+
+**Simple Request:**
 ```
-morning-sage-leadership/
-├── src/
-│   ├── index.ts          # Main agent configuration
-│   ├── tools/            # Custom tools
-│   │   ├── index.ts      # Tool exports
-│   │   └── weather.ts    # Weather tool example
-│   └── workflows/        # Workflow definitions
-│       └── index.ts      # Expense approval workflow
-├── dist/                 # Compiled output (after build)
-├── .env                  # Environment variables
-├── .voltagent/           # Agent memory storage
-├── Dockerfile            # Production deployment
-├── package.json
-└── tsconfig.json
+"Give me some morning motivation for my team of 5 developers"
 ```
 
-## 🧪 Testing Workflows
+**Detailed Request:**
+```
+"Create a morning session for 8 team members doing deep work. We need focused energy and some stoic wisdom. It's early morning and we're working on a complex problem-solving project."
+```
 
-The included expense approval workflow has test scenarios:
+### Using the Workflow
 
-### Scenario 1: Auto-approved (< $500)
+The agent includes a structured workflow for comprehensive morning sessions:
+
 ```json
 {
-  "employeeId": "EMP-123",
-  "amount": 250,
-  "category": "office-supplies",
-  "description": "New laptop mouse and keyboard"
+  "teamSize": 6,
+  "workType": "collaboration",
+  "desiredMood": "energetic",
+  "timeOfDay": "early_morning",
+  "teamContext": "Product launch sprint",
+  "philosophyPreference": "stoicism"
 }
 ```
 
-### Scenario 2: Manager approval required ($500-$5000)
-```json
-{
-  "employeeId": "EMP-456",
-  "amount": 3500,
-  "category": "travel",
-  "description": "Conference registration and hotel"
-}
+### Available Tools
+
+1. **Motivational Quotes Tool**
+   - Philosophy: stoicism, buddhism, vadim_zeland, neville_goddard, mixed
+   - Mood: energetic, focused, calm, creative, motivational
+   - Team context support
+
+2. **Music Selection Tool**
+   - Work types: deep_work, collaboration, brainstorming, routine_tasks, problem_solving
+   - Time-aware recommendations
+   - Team size optimization
+
+## 🏗️ Architecture
+
+```
+src/
+├── index.ts              # Main VoltAgent configuration
+├── tools/
+│   ├── index.ts          # Tool exports
+│   ├── motivational-quotes.ts  # Wisdom generation
+│   └── music-selection.ts      # Music curation
+└── workflows/
+    ├── index.ts          # Workflow exports
+    └── morning-motivation.ts   # Structured sessions
 ```
 
-### Scenario 3: Director approval required (> $5000)
-```json
-{
-  "employeeId": "EMP-789",
-  "amount": 15000,
-  "category": "equipment",
-  "description": "New server hardware"
-}
-```
+## 🔧 Configuration
 
-## 🐳 Docker Deployment
+### Agent Settings
 
-Build and run with Docker:
+The agent is configured with:
+- **Model**: Llama 3.3 70B Versatile (via Groq)
+- **Memory**: LibSQL for conversation history
+- **Server**: Hono-based HTTP server
+
+### Customization
+
+1. **Add New Philosophies**: Edit `src/tools/motivational-quotes.ts`
+2. **Expand Music Collections**: Modify `src/tools/music-selection.ts`
+3. **Create Custom Workflows**: Add to `src/workflows/`
+
+## 🚀 Deployment
+
+### Docker Deployment
 
 ```bash
-# Build image
+# Build the image
 docker build -t morning-sage-leadership .
 
-# Run container
+# Run the container
 docker run -p 3141:3141 --env-file .env morning-sage-leadership
-
-# Or use docker-compose
-docker-compose up
 ```
 
-## 🛠️ Development
+### Production Environment
 
-### Available Scripts
+1. **Set production environment variables**
+2. **Build the project**
+   ```bash
+   npm run build
+   ```
+3. **Start the production server**
+   ```bash
+   npm start
+   ```
 
-- `npm run dev` - Start development server with hot reload
-- `npm run build` - Build for production
-- `npm start` - Run production build
-- `npm run volt` - VoltAgent CLI tools
+### Cloud Deployment Options
 
-### Adding Custom Tools
+- **Railway**: Connect your GitHub repo for automatic deployments
+- **Vercel**: Deploy with serverless functions
+- **DigitalOcean**: Use App Platform for container deployment
+- **AWS/GCP**: Deploy with container services
 
-Create new tools in `src/tools/`:
+## 📊 Monitoring
 
-```typescript
-import { createTool } from '@voltagent/core';
-import { z } from 'zod';
-
-export const myTool = createTool({
-  name: 'myTool',
-  description: 'Description of what this tool does',
-  input: z.object({
-    param: z.string(),
-  }),
-  output: z.string(),
-  handler: async ({ param }) => {
-    // Tool logic here
-    return `Result: ${param}`;
-  },
-});
-```
-
-### Creating New Workflows
-
-Add workflows in `src/workflows/`:
-
-```typescript
-import { createWorkflowChain } from '@voltagent/core';
-import { z } from 'zod';
-
-export const myWorkflow = createWorkflowChain({
-  id: "my-workflow",
-  name: "My Custom Workflow",
-  purpose: "Description of what this workflow does",
-  input: z.object({
-    data: z.string(),
-  }),
-  result: z.object({
-    output: z.string(),
-  }),
-})
-  .andThen({
-    id: "process-data",
-    execute: async ({ data }) => {
-      // Process the input
-      const processed = data.toUpperCase();
-      return { processed };
-    },
-  })
-  .andThen({
-    id: "final-step",
-    execute: async ({ data }) => {
-      // Final transformation
-      return { output: `Result: ${data.processed}` };
-    },
-  });
-```
-
-## 📚 Resources
-
-- **Documentation**: [voltagent.dev/docs](https://voltagent.dev/docs/)
-- **Examples**: [github.com/VoltAgent/voltagent/tree/main/examples](https://github.com/VoltAgent/voltagent/tree/main/examples)
-- **Discord**: [Join our community](https://s.voltagent.dev/discord)
-- **Blog**: [voltagent.dev/](https://voltagent.dev/blog/)
+Access the VoltOps Console at https://console.voltagent.dev to:
+- Monitor agent performance
+- View conversation logs
+- Track workflow executions
+- Analyze usage patterns
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-## 📄 License
+## 📝 License
 
 MIT License - see LICENSE file for details
 
+## 🆘 Support
+
+- **Documentation**: [VoltAgent Docs](https://docs.voltagent.dev)
+- **Community**: [Discord Server](https://discord.gg/voltagent)
+- **Issues**: GitHub Issues tab
+
+## 🎨 Customization Ideas
+
+- **Add new wisdom sources** (Marcus Aurelius, Rumi, etc.)
+- **Integrate with Spotify API** for real playlists
+- **Add team mood tracking** over time
+- **Create seasonal motivation themes**
+- **Implement team feedback loops**
+
 ---
 
-<div align="center">
-  <p>Built with ❤️ using <a href="https://voltagent.dev">VoltAgent</a></p>
-</div>
+*Built with ❤️ using [VoltAgent](https://voltagent.dev) - The future of AI agent development*
