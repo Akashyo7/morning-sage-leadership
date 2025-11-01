@@ -1,5 +1,7 @@
 import { Agent, createWorkflowChain } from "@voltagent/core";
 import { z } from "zod";
+import { musicSelectionTool } from "../tools/music-selection";
+import { motivationalQuotesTool } from "../tools/motivational-quotes";
 
 // ==============================================================================
 // Morning Sage Leadership Motivation Workflow
@@ -109,29 +111,66 @@ export const morningMotivationWorkflow = createWorkflowChain({
     },
   })
 
-  // Step 3: Create session summary
+  // Step 3: Get motivational wisdom
   .andThen({
-    id: "create-summary",
+    id: "get-wisdom",
     execute: async ({ data }) => {
-      const summary = {
-        sessionId: `morning-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        teamSize: data.teamSize,
-        workType: data.workType,
-        desiredMood: data.desiredMood,
-        timeOfDay: data.timeOfDay,
-        wisdomParams: data.wisdomParams,
-        musicParams: data.musicParams,
-        instructions: {
-          wisdom: "Use the motivational quotes tool with the prepared wisdom parameters",
-          music: "Use the music selection tool with the prepared music parameters",
-        },
-      };
+      const wisdomResult = await motivationalQuotesTool.execute({
+        philosophy: data.wisdomParams.philosophy,
+        mood: data.wisdomParams.mood,
+        teamContext: data.wisdomParams.teamContext,
+      });
 
       return {
         ...data,
-        sessionSummary: summary,
-        message: `Morning motivation session prepared for ${data.teamSize} team members. Ready to generate ${data.wisdomParams.philosophy} wisdom and ${data.musicParams.mood} music selection.`,
+        dailyWisdom: wisdomResult,
+      };
+    },
+  })
+
+  // Step 4: Get music selection
+  .andThen({
+    id: "get-music",
+    execute: async ({ data }) => {
+      const musicResult = await musicSelectionTool.execute({
+        mood: data.musicParams.mood,
+        workType: data.musicParams.workType,
+        teamSize: data.musicParams.teamSize,
+        timeOfDay: data.musicParams.timeOfDay,
+      });
+
+      return {
+        ...data,
+        musicSelection: musicResult,
+      };
+    },
+  })
+
+  // Step 5: Create final session summary
+  .andThen({
+    id: "create-summary",
+    execute: async ({ data }) => {
+      const energyLevel = data.desiredMood === "energetic" ? "high" : 
+                         data.desiredMood === "focused" ? "medium" :
+                         data.desiredMood === "calm" ? "low" : "medium";
+
+      const sessionSummary = `🌅 Morning Motivation Session Complete!
+
+**Team:** ${data.teamSize} members
+**Work Type:** ${data.workType}
+**Mood:** ${data.desiredMood}
+**Time:** ${data.timeOfDay}
+
+**Daily Wisdom:** ${data.dailyWisdom.philosophy} philosophy
+**Music:** ${data.musicSelection.duration} curated playlist
+
+Ready to start your productive day with focus and inspiration!`;
+
+      return {
+        dailyWisdom: data.dailyWisdom,
+        musicSelection: data.musicSelection,
+        sessionSummary,
+        energyLevel: energyLevel as "low" | "medium" | "high" | "peak",
       };
     },
   });
