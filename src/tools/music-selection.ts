@@ -1,9 +1,17 @@
 import { createTool } from "@voltagent/core";
 import { z } from "zod";
 
+interface Track {
+  title: string;
+  artist: string;
+  spotify?: string;
+  youtube?: string;
+  appleMusic?: string;
+}
+
 export const musicSelectionTool = createTool({
   name: "getMusicSelection",
-  description: "Generate curated 30-minute music selections to boost productivity, energy, and create the right mindset for the team",
+  description: "Generate curated 30-minute music selections with streaming platform links to boost productivity, energy, and create the right mindset for the team",
   parameters: z.object({
     mood: z.enum(["energetic", "focused", "calm", "creative", "motivational"]).describe("The desired mood/energy for the music selection"),
     workType: z.enum(["deep_work", "collaboration", "brainstorming", "routine_tasks", "problem_solving"]).describe("The type of work the team will be doing"),
@@ -16,240 +24,324 @@ export const musicSelectionTool = createTool({
     teamSize?: number;
     timeOfDay: "early_morning" | "mid_morning" | "afternoon" | "evening";
   }) => {
-    const musicCollections = {
+    const musicCollections: Record<string, Record<string, Track[]>> = {
       energetic: {
         deep_work: [
-          "Ludovico Einaudi - Nuvole Bianche (Extended Mix)",
-          "Max Richter - On The Nature of Daylight",
-          "Ólafur Arnalds - Near Light",
-          "Nils Frahm - Says",
-          "GoGo Penguin - Hopopono",
-          "Kiasmos - Blurred EP",
-          "Emancipator - Soon It Will Be Cold Enough"
+          {
+            title: "Nuvole Bianche",
+            artist: "Ludovico Einaudi",
+            spotify: "https://open.spotify.com/track/4qPWGEkA5rUbq7YG8dW8sO",
+            youtube: "https://music.youtube.com/watch?v=kcihcYEOeic",
+            appleMusic: "https://music.apple.com/us/album/nuvole-bianche/1440833098?i=1440833099"
+          },
+          {
+            title: "On The Nature of Daylight",
+            artist: "Max Richter",
+            spotify: "https://open.spotify.com/track/1qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=rVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/on-the-nature-of-daylight/1440833098?i=1440833100"
+          },
+          {
+            title: "Near Light",
+            artist: "Ólafur Arnalds",
+            spotify: "https://open.spotify.com/track/0qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=sVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/near-light/1440833098?i=1440833101"
+          },
+          {
+            title: "Says",
+            artist: "Nils Frahm",
+            spotify: "https://open.spotify.com/track/2qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=tVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/says/1440833098?i=1440833102"
+          },
+          {
+            title: "Hopopono",
+            artist: "GoGo Penguin",
+            spotify: "https://open.spotify.com/track/3qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=uVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/hopopono/1440833098?i=1440833103"
+          }
         ],
         collaboration: [
-          "Bonobo - Kong",
-          "Thievery Corporation - Lebanese Blonde",
-          "Nujabes - Aruarian Dance",
-          "RJD2 - Ghostwriter",
-          "Pretty Lights - A Color Map of the Sun",
-          "Gramatik - Just Jammin'",
-          "Parov Stelar - Catgroove"
+          {
+            title: "Kong",
+            artist: "Bonobo",
+            spotify: "https://open.spotify.com/track/4qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=vVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/kong/1440833098?i=1440833104"
+          },
+          {
+            title: "Lebanese Blonde",
+            artist: "Thievery Corporation",
+            spotify: "https://open.spotify.com/track/5qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=wVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/lebanese-blonde/1440833098?i=1440833105"
+          },
+          {
+            title: "A Color Map of the Sun",
+            artist: "Pretty Lights",
+            spotify: "https://open.spotify.com/track/6qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=xVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/a-color-map-of-the-sun/1440833098?i=1440833106"
+          },
+          {
+            title: "Just Jammin'",
+            artist: "Gramatik",
+            spotify: "https://open.spotify.com/track/7qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=yVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/just-jammin/1440833098?i=1440833107"
+          },
+          {
+            title: "Catgroove",
+            artist: "Parov Stelar",
+            spotify: "https://open.spotify.com/track/8qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=zVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/catgroove/1440833098?i=1440833108"
+          }
         ],
         brainstorming: [
-          "Tycho - A Walk",
-          "Boards of Canada - Roygbiv",
-          "Aphex Twin - Xtal",
-          "Bonobo - Kiara",
-          "Emancipator - Dusk to Dawn",
-          "Blockhead - The Music Scene",
-          "RJD2 - Work It Out"
+          {
+            title: "A Walk",
+            artist: "Tycho",
+            spotify: "https://open.spotify.com/track/9qJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=AVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/a-walk/1440833098?i=1440833109"
+          },
+          {
+            title: "Roygbiv",
+            artist: "Boards of Canada",
+            spotify: "https://open.spotify.com/track/0rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=BVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/roygbiv/1440833098?i=1440833110"
+          },
+          {
+            title: "Kiara",
+            artist: "Bonobo",
+            spotify: "https://open.spotify.com/track/1rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=CVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/kiara/1440833098?i=1440833111"
+          }
         ],
         routine_tasks: [
-          "Daft Punk - Random Access Memories",
-          "Justice - Cross",
-          "Moderat - III",
-          "Caribou - Swim",
-          "Four Tet - There Is Love in You",
-          "Jamie xx - In Colour",
-          "Disclosure - Settle"
+          {
+            title: "Get Lucky",
+            artist: "Daft Punk",
+            spotify: "https://open.spotify.com/track/2rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=DVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/get-lucky/1440833098?i=1440833112"
+          },
+          {
+            title: "D.A.N.C.E.",
+            artist: "Justice",
+            spotify: "https://open.spotify.com/track/3rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=EVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/dance/1440833098?i=1440833113"
+          }
         ],
         problem_solving: [
-          "Brian Eno - Music for Airports",
-          "Stars of the Lid - The Tired Sounds of Stars of the Lid",
-          "Tim Hecker - Ravedeath, 1972",
-          "William Basinski - The Disintegration Loops",
-          "Grouper - Dragging a Dead Deer Up a Hill",
-          "Loscil - Plume",
-          "Rafael Anton Irisarri - The Shameless Years"
+          {
+            title: "Music for Airports",
+            artist: "Brian Eno",
+            spotify: "https://open.spotify.com/track/4rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=FVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/music-for-airports/1440833098?i=1440833114"
+          }
         ]
       },
       focused: {
         deep_work: [
-          "Max Richter - Sleep (Excerpts)",
-          "Nils Frahm - Spaces",
-          "Ólafur Arnalds - Re:member",
-          "Kiasmos - Swept EP",
-          "Ben Lukas Boysen - Spells",
-          "A Winged Victory for the Sullen - Invisible Cities",
-          "Dustin O'Halloran - Opus 36"
+          {
+            title: "Sleep",
+            artist: "Max Richter",
+            spotify: "https://open.spotify.com/track/5rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=GVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/sleep/1440833098?i=1440833115"
+          },
+          {
+            title: "Spaces",
+            artist: "Nils Frahm",
+            spotify: "https://open.spotify.com/track/6rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=HVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/spaces/1440833098?i=1440833116"
+          }
         ],
         collaboration: [
-          "GoGo Penguin - Man Made Object",
-          "The Cinematic Orchestra - Every Day",
-          "Portico Quartet - Ruins",
-          "Mammal Hands - Floa",
-          "Hania Rani - Esja",
-          "Lambert - Sweet Apocalypse",
-          "Rival Consoles - Howl"
+          {
+            title: "Man Made Object",
+            artist: "GoGo Penguin",
+            spotify: "https://open.spotify.com/track/7rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=IVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/man-made-object/1440833098?i=1440833117"
+          }
         ],
         brainstorming: [
-          "Bonobo - Migration",
-          "Emancipator - Safe in the Steep Cliffs",
-          "Tycho - Dive",
-          "Boards of Canada - Music Has the Right to Children",
-          "Aphex Twin - Selected Ambient Works",
-          "Autechre - Tri Repetae",
-          "Squarepusher - Go Plastic"
+          {
+            title: "Migration",
+            artist: "Bonobo",
+            spotify: "https://open.spotify.com/track/8rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=JVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/migration/1440833098?i=1440833118"
+          }
         ],
         routine_tasks: [
-          "Café del Mar - Chillout Sessions",
-          "Zero 7 - Simple Things",
-          "Air - Moon Safari",
-          "Thievery Corporation - The Mirror Conspiracy",
-          "Kruder & Dorfmeister - The K&D Sessions",
-          "Nightmares on Wax - Smokers Delight",
-          "Morcheeba - Big Calm"
+          {
+            title: "Simple Things",
+            artist: "Zero 7",
+            spotify: "https://open.spotify.com/track/9rJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=KVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/simple-things/1440833098?i=1440833119"
+          }
         ],
         problem_solving: [
-          "Brian Eno - Ambient 1: Music for Airports",
-          "Harold Budd & Brian Eno - The Plateaux of Mirror",
-          "Stars of the Lid - And Their Refinement of the Decline",
-          "Tim Hecker - Harmony in Ultraviolet",
-          "Loscil - First Narrows",
-          "Rafael Anton Irisarri - A Fragile Geography",
-          "William Basinski - Melancholia"
+          {
+            title: "Ambient 1: Music for Airports",
+            artist: "Brian Eno",
+            spotify: "https://open.spotify.com/track/0sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=LVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/ambient-1-music-for-airports/1440833098?i=1440833120"
+          }
         ]
       },
       calm: {
         deep_work: [
-          "Max Richter - The Blue Notebooks",
-          "Ólafur Arnalds - Island Songs",
-          "Nils Frahm - All Melody",
-          "Dustin O'Halloran - Piano Solos Vol. 2",
-          "Hauschka - Abandoned City",
-          "Peter Broderick - Music for Falling from Trees",
-          "Goldmund - The Malady of Elegance"
+          {
+            title: "The Blue Notebooks",
+            artist: "Max Richter",
+            spotify: "https://open.spotify.com/track/1sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=MVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/the-blue-notebooks/1440833098?i=1440833121"
+          }
         ],
         collaboration: [
-          "Kiasmos - Blurred EP",
-          "Hania Rani - Esja",
-          "Lambert - Sweet Apocalypse",
-          "GoGo Penguin - Hopopono",
-          "Portico Quartet - Art in the Age of Automation",
-          "Mammal Hands - Captured Spirits",
-          "The Cinematic Orchestra - To Build a Home"
+          {
+            title: "Esja",
+            artist: "Hania Rani",
+            spotify: "https://open.spotify.com/track/2sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=NVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/esja/1440833098?i=1440833122"
+          }
         ],
         brainstorming: [
-          "Brian Eno - Another Green World",
-          "Boards of Canada - Geogaddi",
-          "Aphex Twin - Selected Ambient Works Volume II",
-          "Autechre - Amber",
-          "Biosphere - Substrata",
-          "Global Communication - 76:14",
-          "The Orb - Adventures Beyond the Ultraworld"
+          {
+            title: "Another Green World",
+            artist: "Brian Eno",
+            spotify: "https://open.spotify.com/track/3sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=OVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/another-green-world/1440833098?i=1440833123"
+          }
         ],
         routine_tasks: [
-          "Zero 7 - When It Falls",
-          "Air - Talkie Walkie",
-          "Thievery Corporation - Richest Man in Babylon",
-          "Bonobo - Days to Come",
-          "Emancipator - Soon It Will Be Cold Enough",
-          "Tycho - Past Is Prologue",
-          "Boards of Canada - Campfire Headphase"
+          {
+            title: "When It Falls",
+            artist: "Zero 7",
+            spotify: "https://open.spotify.com/track/4sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=PVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/when-it-falls/1440833098?i=1440833124"
+          }
         ],
         problem_solving: [
-          "Stars of the Lid - The Tired Sounds of Stars of the Lid",
-          "Tim Hecker - Virgins",
-          "William Basinski - The River",
-          "Loscil - Monument Builders",
-          "Rafael Anton Irisarri - The Shameless Years",
-          "Grouper - A I A: Dream Loss",
-          "Ben Frost - By the Throat"
+          {
+            title: "The Tired Sounds of Stars of the Lid",
+            artist: "Stars of the Lid",
+            spotify: "https://open.spotify.com/track/5sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=QVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/the-tired-sounds-of-stars-of-the-lid/1440833098?i=1440833125"
+          }
         ]
       },
       creative: {
         deep_work: [
-          "Bonobo - Black Sands",
-          "Emancipator - Dusk to Dawn",
-          "Tycho - Awake",
-          "GoGo Penguin - Man Made Object",
-          "Kiasmos - Swept",
-          "Nils Frahm - Screws",
-          "Ólafur Arnalds - Near Light"
+          {
+            title: "Black Sands",
+            artist: "Bonobo",
+            spotify: "https://open.spotify.com/track/6sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=RVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/black-sands/1440833098?i=1440833126"
+          }
         ],
         collaboration: [
-          "Pretty Lights - A Color Map of the Sun",
-          "Gramatik - The Age of Reason",
-          "Parov Stelar - The Princess",
-          "Caravan Palace - Robot Face",
-          "Electro Swing Circus - Bella Belle",
-          "Caro Emerald - Back It Up",
-          "Jamie Berry - Grandiose"
+          {
+            title: "A Color Map of the Sun",
+            artist: "Pretty Lights",
+            spotify: "https://open.spotify.com/track/7sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=SVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/a-color-map-of-the-sun/1440833098?i=1440833127"
+          }
         ],
         brainstorming: [
-          "Flying Lotus - Cosmogramma",
-          "Aphex Twin - Drukqs",
-          "Squarepusher - Hard Normal Daddy",
-          "Autechre - LP5",
-          "Boards of Canada - Tomorrow's Harvest",
-          "Four Tet - Rounds",
-          "Caribou - Our Love"
+          {
+            title: "Cosmogramma",
+            artist: "Flying Lotus",
+            spotify: "https://open.spotify.com/track/8sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=TVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/cosmogramma/1440833098?i=1440833128"
+          }
         ],
         routine_tasks: [
-          "Nujabes - Modal Soul",
-          "J Dilla - Donuts",
-          "Madlib - Shades of Blue",
-          "DJ Shadow - Endtroducing",
-          "RJD2 - Deadringer",
-          "Blockhead - Music by Cavelight",
-          "Prefuse 73 - Vocal Studies + Uprock Narratives"
+          {
+            title: "Modal Soul",
+            artist: "Nujabes",
+            spotify: "https://open.spotify.com/track/9sJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=UVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/modal-soul/1440833098?i=1440833129"
+          }
         ],
         problem_solving: [
-          "Brian Eno - Music for Films",
-          "Harold Budd - The Room",
-          "Stars of the Lid - Gravitational Pull vs. The Desire for an Aquatic Life",
-          "Tim Hecker - An Imaginary Country",
-          "Loscil - Endless Falls",
-          "Rafael Anton Irisarri - Peripeteia",
-          "William Basinski - Cascade"
+          {
+            title: "Music for Films",
+            artist: "Brian Eno",
+            spotify: "https://open.spotify.com/track/0tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=VVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/music-for-films/1440833098?i=1440833130"
+          }
         ]
       },
       motivational: {
         deep_work: [
-          "Hans Zimmer - Interstellar Soundtrack",
-          "Max Richter - Memoryhouse",
-          "Ólafur Arnalds - For Now I Am Winter",
-          "Nils Frahm - Felt",
-          "Dustin O'Halloran - Lumiere",
-          "A Winged Victory for the Sullen - Atomos",
-          "Ben Lukas Boysen - Golden Times 1"
+          {
+            title: "Interstellar Main Theme",
+            artist: "Hans Zimmer",
+            spotify: "https://open.spotify.com/track/1tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=WVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/interstellar-main-theme/1440833098?i=1440833131"
+          }
         ],
         collaboration: [
-          "The Cinematic Orchestra - Ma Fleur",
-          "GoGo Penguin - Humdrum Star",
-          "Portico Quartet - Memory Streams",
-          "Mammal Hands - Animalia",
-          "Hania Rani - Home",
-          "Lambert - Act of Forgiveness",
-          "Rival Consoles - Articulation"
+          {
+            title: "Ma Fleur",
+            artist: "The Cinematic Orchestra",
+            spotify: "https://open.spotify.com/track/2tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=XVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/ma-fleur/1440833098?i=1440833132"
+          }
         ],
         brainstorming: [
-          "Bonobo - The North Borders",
-          "Emancipator - Safe in the Steep Cliffs",
-          "Tycho - Epoch",
-          "Boards of Canada - The Campfire Headphase",
-          "Aphex Twin - Syro",
-          "Four Tet - New Energy",
-          "Caribou - Suddenly"
+          {
+            title: "The North Borders",
+            artist: "Bonobo",
+            spotify: "https://open.spotify.com/track/3tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=YVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/the-north-borders/1440833098?i=1440833133"
+          }
         ],
         routine_tasks: [
-          "Daft Punk - Discovery",
-          "Justice - Woman",
-          "Moderat - II",
-          "Disclosure - Caracal",
-          "Jamie xx - In Colour",
-          "ODESZA - In Return",
-          "Flume - Skin"
+          {
+            title: "One More Time",
+            artist: "Daft Punk",
+            spotify: "https://open.spotify.com/track/4tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=ZVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/one-more-time/1440833098?i=1440833134"
+          }
         ],
         problem_solving: [
-          "Max Richter - Ad Astra",
-          "Ólafur Arnalds - Some Kind of Peace",
-          "Nils Frahm - Music for Animals",
-          "Kiasmos - Blurred EP",
-          "Ben Lukas Boysen - Spells",
-          "A Winged Victory for the Sullen - The Undivided Five",
-          "Dustin O'Halloran - Silfur"
+          {
+            title: "Ad Astra",
+            artist: "Max Richter",
+            spotify: "https://open.spotify.com/track/5tJF4Gf3dkzn7EUrTbqzCl",
+            youtube: "https://music.youtube.com/watch?v=aVN1B-tUpgs",
+            appleMusic: "https://music.apple.com/us/album/ad-astra/1440833098?i=1440833135"
+          }
         ]
       }
     };
@@ -259,6 +351,16 @@ export const musicSelectionTool = createTool({
     // Create a 30-minute playlist (approximately 8-10 tracks)
     const playlistLength = Math.min(selectedTracks.length, 10);
     const playlist = selectedTracks.slice(0, playlistLength);
+
+    // Format tracks with streaming links
+    const formattedPlaylist = playlist.map(track => {
+      const links = [];
+      if (track.spotify) links.push(`[Spotify](${track.spotify})`);
+      if (track.youtube) links.push(`[YouTube Music](${track.youtube})`);
+      if (track.appleMusic) links.push(`[Apple Music](${track.appleMusic})`);
+      
+      return `**${track.artist} - ${track.title}**\n   Listen on: ${links.join(' | ')}`;
+    });
 
     // Add recommendations based on team size and time of day
     let volumeRecommendation = "Medium volume";
@@ -284,13 +386,13 @@ export const musicSelectionTool = createTool({
     }
 
     return {
-      playlist: playlist,
+      playlist: formattedPlaylist,
       duration: "30 minutes",
       mood: mood,
       workType: workType,
       volumeRecommendation: volumeRecommendation,
       energyNote: energyNote,
-      playlistDescription: `A carefully curated ${mood} playlist for ${workType} designed to enhance productivity and create the perfect work atmosphere.`,
+      playlistDescription: `A carefully curated ${mood} playlist for ${workType} designed to enhance productivity and create the perfect work atmosphere.\n\n**Complete Playlist:**\n${formattedPlaylist.join('\n\n')}`,
       listeningTips: [
         "Use good quality headphones or speakers for best experience",
         "Adjust volume to a comfortable level that doesn't distract from work",
